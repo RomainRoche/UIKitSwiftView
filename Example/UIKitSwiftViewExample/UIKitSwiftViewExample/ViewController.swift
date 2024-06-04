@@ -43,6 +43,7 @@ class ViewController: UIViewController {
                                         for: .vertical)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
         titleLabel.topAnchor
             .constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16)
             .isActive = true
@@ -57,7 +58,7 @@ class ViewController: UIViewController {
     private func setupList() {
         list = UIKitSwiftView(observing: model) { [unowned self] in
             ScrollView {
-                VStack {
+                LazyVStack(spacing: 12) {
                     Text("I'm a SwiftUI Scroll View")
                         .font(.title)
                         .frame(maxWidth: .infinity)
@@ -66,6 +67,16 @@ class ViewController: UIViewController {
                     Text("Scroll model's height: \(self.model.scrollHeight)")
                         .frame(maxWidth: .infinity)
                         .padding(.bottom, 12)
+                    
+                    ForEach((0...200), id: \.self) { idx in
+                        Text("Item n° \(idx)")
+                            .foregroundStyle(Color.white)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.gray.opacity(0.75))
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
                 }
                 .padding(.all, 24)
             }
@@ -108,6 +119,7 @@ class ViewController: UIViewController {
         
         view.addSubview(swiftUIButton)
         swiftUIButton.setContentHuggingPriority(.required, for: .vertical)
+        swiftUIButton.setContentCompressionResistancePriority(.required, for: .vertical)
         swiftUIButton.translatesAutoresizingMaskIntoConstraints = false
         swiftUIButton.topAnchor
             .constraint(equalTo: list.bottomAnchor, constant: 16)
