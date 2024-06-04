@@ -1,5 +1,5 @@
 //
-//  SwiftUIKitView.swift
+//  UIKitSwiftView.swift
 //  tit
 //
 //  Created by Romain Roche on 06/05/2024.
@@ -10,7 +10,7 @@ import UIKit
 import SwiftUI
 import Combine
 
-public final class SwiftUIKitView: UIView {
+public final class UIKitSwiftView: UIView {
 
     private let host: UIHostingController<AnyView>
     
