@@ -30,5 +30,21 @@ final class MyViewController: UIViewController {
 }
 ```
 
+The `UIKitSwiftView` can also observe some `ObservableObject`.
+
+```
+
+final class MyModel: ObservableObject {
+    @Published var title: String = "Some title"
+}
+
+let model = MyModel()
+
+let view = UIKitSwiftView(observing: model) { 
+    Text(model.title)
+}
+
+```
+
 
 
