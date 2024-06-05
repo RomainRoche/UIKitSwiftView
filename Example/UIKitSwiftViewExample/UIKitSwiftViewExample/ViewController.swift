@@ -57,13 +57,16 @@ class ViewController: UIViewController {
     
     private func setupList() {
         list = UIKitSwiftView(observing: model) { [unowned self] in
+            Divider()
+            
+            Text("I'm a SwiftUI Scroll View")
+                .font(.title)
+                .frame(maxWidth: .infinity)
+                .padding(.bottom, 12)
+                .foregroundColor(.accentColor)
+            
             ScrollView {
                 LazyVStack(spacing: 12) {
-                    Text("I'm a SwiftUI Scroll View")
-                        .font(.title)
-                        .frame(maxWidth: .infinity)
-                        .padding(.bottom, 12)
-                    
                     Text("Scroll model's height: \(self.model.scrollHeight)")
                         .frame(maxWidth: .infinity)
                         .padding(.bottom, 12)
