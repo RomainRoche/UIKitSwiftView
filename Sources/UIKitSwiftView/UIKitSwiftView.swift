@@ -10,10 +10,19 @@ import UIKit
 import SwiftUI
 import Combine
 
+/// The `UIKitSwiftView` allows to wrap `SwiftUI` components as a `UIKit` subview.
 public final class UIKitSwiftView: UIView {
 
+    /// The host view controller.
     private let host: UIHostingController<AnyView>
+    /// Cancellable object array.
+    private var cancels = Set<AnyCancellable>()
+    /// The view builder closure. 
+    private let builder: () -> AnyView
     
+    /// Setup the host view controller's view and its constraints.
+    /// - Note: This is done as a lazy var getter so it is done only once
+    /// in the view's lifecycle.
     private lazy var setup: Void = {
         host.loadViewIfNeeded()
         addSubview(host.view)
@@ -32,10 +41,6 @@ public final class UIKitSwiftView: UIView {
             .isActive = true
     }()
     
-    private var cancels = Set<AnyCancellable>()
-    
-    private let builder: () -> AnyView
-    
     public override var backgroundColor: UIColor? {
         didSet {
             host.view.backgroundColor = backgroundColor
@@ -46,9 +51,12 @@ public final class UIKitSwiftView: UIView {
         host.view.intrinsicContentSize
     }
     
+    /// Init the view.
+    /// - Parameter observable: The `ObservableObject` to observe to relayout the view when needed. Optional.
+    /// - Parameter builder: The view builder closure.
     public init(
         observing observable: some ObservableObject = VoidObservable(),
-        builder: @escaping () -> some View
+        @ViewBuilder builder: @escaping () -> some View
     ) {
         self.builder = { AnyView(builder()) }
         self.host = UIHostingController(rootView: self.builder())
