@@ -19,14 +19,6 @@ public final class UIKitSwiftView: UIView {
     private var cancels = Set<AnyCancellable>()
     /// The view builder closure. 
     private let builder: () -> AnyView
-    /// Need to re call builder
-    @MainActor private var shouldBuild = true {
-        didSet {
-            if shouldBuild {
-                self.setNeedsLayout()
-            }
-        }
-    }
     
     /// Setup the host view controller's view and its constraints.
     /// - Note: This is done as a lazy var getter so it is done only once
@@ -71,7 +63,7 @@ public final class UIKitSwiftView: UIView {
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         
         observable.objectWillChange.sink { [weak self] _ in
-            self?.shouldBuild = true
+            self?.setNeedsLayout()
         }.store(in: &cancels)
     }
     
@@ -92,10 +84,7 @@ public final class UIKitSwiftView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        if shouldBuild {
-            host.rootView = builder()
-        }
-        shouldBuild = false
+        host.rootView = builder()
     }
 
 }
