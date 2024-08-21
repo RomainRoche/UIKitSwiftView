@@ -101,24 +101,23 @@ class ViewController: UIViewController {
     }
     
     private func setupButton() {
-        swiftUIButton = UIKitSwiftView {
-            Button {
-                self.onButton()
-            } label: {
-                Label {
-                    Text("Some other SwiftUI action")
-                        .foregroundColor(.white)
-                } icon: {
-                    Image(systemName: "arrowshape.right.circle")
-                        .renderingMode(.template)
-                        .foregroundColor(.white)
-                }
-                .frame(maxWidth: .infinity)
+        swiftUIButton = Button { [ weak self] in
+            self?.onButton()
+        } label: {
+            Label {
+                Text("Some other SwiftUI action")
+                    .foregroundColor(.white)
+            } icon: {
+                Image(systemName: "arrowshape.right.circle")
+                    .renderingMode(.template)
+                    .foregroundColor(.white)
             }
-            .padding(.vertical, 8)
-            .background(Color.accentColor)
-            .clipShape(Capsule())
+            .frame(maxWidth: .infinity)
         }
+        .padding(.vertical, 8)
+        .background(Color.accentColor)
+        .clipShape(Capsule())
+        .asUIKit()
         
         view.addSubview(swiftUIButton)
         swiftUIButton.setContentHuggingPriority(.required, for: .vertical)

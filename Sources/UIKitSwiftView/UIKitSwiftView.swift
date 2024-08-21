@@ -11,7 +11,7 @@ import SwiftUI
 import Combine
 
 /// The `UIKitSwiftView` allows to wrap `SwiftUI` components as a `UIKit` subview.
-public final class UIKitSwiftView: UIView {
+open class UIKitSwiftView: UIView {
 
     /// The host view controller.
     private let host: UIHostingController<AnyView>
@@ -66,9 +66,9 @@ public final class UIKitSwiftView: UIView {
             self?.setNeedsLayout()
         }.store(in: &cancels)
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("Not implemented")
+        
+    public required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     deinit {
@@ -92,4 +92,3 @@ public final class UIKitSwiftView: UIView {
 public final class VoidObservable: ObservableObject {
     public init() {}
 }
-
