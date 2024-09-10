@@ -14,11 +14,17 @@ import Combine
 public final class UIKitSwiftView: UIView {
 
     /// The host view controller.
-    private let host: UIHostingController<AnyView>
+    private var host: UIHostingController<LayoutChangeView>
     /// Cancellable object array.
     private var cancels = Set<AnyCancellable>()
     /// The view builder closure. 
-    private let builder: () -> AnyView
+    private var builder: () -> LayoutChangeView = {
+        LayoutChangeView {
+            EmptyView()
+        } onLayoutChange: {
+            //
+        }
+    }
     
     /// Setup the host view controller's view and its constraints.
     /// - Note: This is done as a lazy var getter so it is done only once
@@ -58,9 +64,17 @@ public final class UIKitSwiftView: UIView {
         observing observable: some ObservableObject = VoidObservable(),
         @ViewBuilder builder: @escaping () -> some View
     ) {
-        self.builder = { AnyView(builder()) }
         self.host = UIHostingController(rootView: self.builder())
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+       
+        self.builder = { [weak self] in
+            LayoutChangeView(builder: builder) {
+                guard let self else { return }
+                self.setNeedsLayout()
+                self.setNeedsUpdateConstraints()
+            }
+        }
+        self.host = UIHostingController(rootView: self.builder())
         
         observable.objectWillChange.sink { [weak self] _ in
             self?.setNeedsLayout()
