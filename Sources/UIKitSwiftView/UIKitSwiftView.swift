@@ -70,8 +70,9 @@ public final class UIKitSwiftView: UIView {
         self.builder = { [weak self] in
             LayoutChangeView(builder: builder) {
                 guard let self else { return }
-                self.setNeedsLayout()
-                self.setNeedsUpdateConstraints()
+                self.host.view.invalidateIntrinsicContentSize()
+                self.host.view.setNeedsLayout()
+                self.host.view.setNeedsUpdateConstraints()
             }
         }
         self.host = UIHostingController(rootView: self.builder())
