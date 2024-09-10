@@ -57,6 +57,22 @@ public final class UIKitSwiftView: UIView {
         host.view.intrinsicContentSize
     }
     
+    public override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
+        host.view.systemLayoutSizeFitting(targetSize)
+    }
+    
+    public override func systemLayoutSizeFitting(
+        _ targetSize: CGSize,
+        withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
+        verticalFittingPriority: UILayoutPriority
+    ) -> CGSize {
+        host.view.systemLayoutSizeFitting(
+            targetSize,
+            withHorizontalFittingPriority: horizontalFittingPriority,
+            verticalFittingPriority: verticalFittingPriority
+        )
+    }
+    
     /// Init the view.
     /// - Parameter observable: The `ObservableObject` to observe to relayout the view when needed. Optional.
     /// - Parameter builder: The view builder closure.
