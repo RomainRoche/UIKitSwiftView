@@ -14,6 +14,7 @@ class ViewController: UIViewController {
 
     final class Model: ObservableObject {
         @Published var scrollHeight: CGFloat = 0
+        @Published var swiftUITitle: String? = nil
     }
     
     private let titleLabel = UILabel()
@@ -26,6 +27,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.model.swiftUITitle = "I'm a SwiftUI Title"
+        }
     }
     
     private func setup() {
@@ -59,11 +67,13 @@ class ViewController: UIViewController {
         list = UIKitSwiftView(observing: model) { [unowned self] in
             Divider()
             
-            Text("I'm a SwiftUI Scroll View")
-                .font(.title)
-                .frame(maxWidth: .infinity)
-                .padding(.bottom, 12)
-                .foregroundColor(.accentColor)
+            if let title = self.model.swiftUITitle {
+                Text(title)
+                    .font(.title)
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom, 12)
+                    .foregroundColor(.accentColor)
+            }
             
             ScrollView {
                 LazyVStack(spacing: 12) {
