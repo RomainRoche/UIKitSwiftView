@@ -10,7 +10,8 @@ import UIKit
 
 public struct FromUIKit<V: UIView>: UIViewRepresentable {
     
-    private let view: V = .init(frame: .zero)
+    @State
+    private var view: V = .init(frame: .zero)
     
     @MainActor
     private var setup: (V) -> Void
@@ -56,9 +57,16 @@ public struct FromUIKit<V: UIView>: UIViewRepresentable {
     .background(Color.blue)
 }
 
+@available(iOS 17, *)
 #Preview {
-    FromUIKit(UIImageView.self) { image in
-        image.image = .init(systemName: "rectangle.and.pencil.and.ellipsis.rtl")
+    @Previewable @State var imageName = "rectangle.and.pencil.and.ellipsis.rtl"
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        imageName = "pencil.tip.crop.circle.badge.minus.fill"
+    }
+    
+    return FromUIKit(UIImageView.self) { image in
+        image.image = .init(systemName: imageName)
         image.backgroundColor = .clear
         image.tintColor = .red
     }
