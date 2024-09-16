@@ -29,8 +29,11 @@ public final class UIKitSwiftView: UIView {
     /// Setup the host view controller's view and its constraints.
     /// - Note: This is done as a lazy var getter so it is done only once
     /// in the view's lifecycle.
-    private lazy var setup: Void = {
+    private func setup() {
         host.loadViewIfNeeded()
+        if host.view.superview != nil {
+            host.view.removeFromSuperview()
+        }
         addSubview(host.view)
         host.view.translatesAutoresizingMaskIntoConstraints = false
         host.view.topAnchor
@@ -45,7 +48,7 @@ public final class UIKitSwiftView: UIView {
         trailingAnchor
             .constraint(equalTo: host.view.trailingAnchor)
             .isActive = true
-    }()
+    }
     
     public override var backgroundColor: UIColor? {
         didSet {
@@ -107,13 +110,18 @@ public final class UIKitSwiftView: UIView {
     public override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
         if newWindow != nil {
-            _ = setup
+            setup()
         }
     }
     
     public override func layoutSubviews() {
         super.layoutSubviews()
         host.rootView = builder()
+    }
+    
+    public override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        setup()
     }
 
 }
