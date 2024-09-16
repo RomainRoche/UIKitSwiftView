@@ -61,6 +61,11 @@ public final class UIKitSwiftView: UIView {
         host.view.systemLayoutSizeFitting(targetSize)
     }
     
+    public override var insetsLayoutMarginsFromSafeArea: Bool {
+        get { host.view.insetsLayoutMarginsFromSafeArea }
+        set { host.view.insetsLayoutMarginsFromSafeArea = newValue }
+    }
+    
     public override func systemLayoutSizeFitting(
         _ targetSize: CGSize,
         withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
