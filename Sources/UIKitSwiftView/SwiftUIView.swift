@@ -13,14 +13,17 @@ public struct FromUIKit<V: UIView>: UIViewRepresentable {
     @State
     private var view: V = .init(frame: .zero)
     
-    @MainActor
-    private var setup: (V) -> Void
+    private let coordinator: UIKitCoordinator
     
     public init(
         _ typeOf: V.Type,
         _ setup: @MainActor @escaping (V) -> Void
     ) {
-        self.setup = setup
+        self.coordinator = .init(setup: setup)
+    }
+    
+    public func makeCoordinator() -> UIKitCoordinator {
+        self.coordinator
     }
     
     public func makeUIView(context: Context) -> V {
@@ -28,7 +31,7 @@ public struct FromUIKit<V: UIView>: UIViewRepresentable {
     }
     
     public func updateUIView(_ uiView: V, context: Context) {
-        setup(view)
+        self.coordinator.setup(view)
     }
     
     @available(iOS 16, *)
@@ -43,6 +46,16 @@ public struct FromUIKit<V: UIView>: UIViewRepresentable {
         return view.systemLayoutSizeFitting(
             CGSize(width: proposal.width, height: proposal.height)
         )
+    }
+    
+    public class UIKitCoordinator {
+        
+        internal var setup: (V) -> Void
+        
+        init(setup: @escaping (V) -> Void) {
+            self.setup = setup
+        }
+        
     }
     
 }
