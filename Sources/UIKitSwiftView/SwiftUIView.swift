@@ -16,6 +16,14 @@ public struct FromUIKit<V: UIView>: UIViewRepresentable {
     private let coordinator: UIKitCoordinator
     
     public init(
+        with view: @autoclosure @escaping () -> V,
+        _ setup: @MainActor @escaping (V) -> Void
+    ) {
+        self.view = view()
+        self.coordinator = .init(setup: setup)
+    }
+    
+    public init(
         _ typeOf: V.Type,
         _ setup: @MainActor @escaping (V) -> Void
     ) {
