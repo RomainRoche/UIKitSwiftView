@@ -11,14 +11,23 @@ import UIKit
 public struct FromUIKit<V: UIView>: UIViewRepresentable {
     
     @State
-    private var view: V = .init(frame: .zero)
+    private var view: V
     
     private let coordinator: UIKitCoordinator
+    
+    public init(
+        with view: @autoclosure @escaping () -> V,
+        _ setup: @MainActor @escaping (V) -> Void
+    ) {
+        self.view = view()
+        self.coordinator = .init(setup: setup)
+    }
     
     public init(
         _ typeOf: V.Type,
         _ setup: @MainActor @escaping (V) -> Void
     ) {
+        self.view = .init(frame: .zero)
         self.coordinator = .init(setup: setup)
     }
     
